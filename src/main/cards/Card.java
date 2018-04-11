@@ -55,16 +55,13 @@ public class Card {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(face, suit, points);
     }
 
     @Override
     public String toString() {
-        return "Card{" +
-                "face=" + face +
-                ", suit=" + suit +
-                ", points=" + points +
-                '}';
+        String faceString = face.isPicture() ? String.valueOf(face.name().charAt(0)) : String.valueOf(face.getPoints());
+        String suitString = suit.getUnicodeString();
+        return faceString + suitString;
     }
 }

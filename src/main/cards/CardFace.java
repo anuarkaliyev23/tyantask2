@@ -37,4 +37,10 @@ public enum CardFace {
             default: throw new BlackJackUncheckedException("Unknown card");
         }
     }
+
+    public boolean isPicture() {
+        if (this == ACE || this == KING || this == QUEEN || this == JACK)
+            return true;
+        else return false;
+    }
 }
