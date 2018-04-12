@@ -17,6 +17,10 @@ public class CardDeck {
         this.shuffle();
     }
 
+    public CardDeck(CardDeck other) {
+        deck = new ArrayDeque<>(other.getDeck());
+    }
+
     public Deque<Card> getDeck() {
         return deck;
     }

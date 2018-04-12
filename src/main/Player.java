@@ -2,38 +2,31 @@ package main;
 
 import main.cards.Card;
 import main.cards.CardFace;
+import main.exceptions.ImpossibleSplitException;
 import main.exceptions.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
-    private static final int BLACKJACK_POINTS = 21;
-    private static final int ACE_BLACKJACK_CASE_POINTS = 1;
+public class Player extends Dealer {
 
-    private List<Card> hand;
+    private static final int HAND_SIZE_FOR_SPLIT = 2;
+
     private int money;
     private List<Card> split;
 
-    public Player(List<Card> hand, List<Card> split, int money) {
-        this.hand = new ArrayList<>(hand);
-        this.split = new ArrayList<>(split);
-        this.money = money;
-    }
-
     public Player(int money) {
+        super();
         this.money = money;
-        this.hand = new ArrayList<>();
         this.split = new ArrayList<>();
     }
 
-    public List<Card> getHand() {
-        return hand;
+    public Player(Player other) {
+        super();
+        this.money = other.getMoney();
+        this.split = new ArrayList<>(other.getSplit());
     }
 
-    public void setHand(List<Card> hand) {
-        this.hand = new ArrayList<>(hand);
-    }
 
     public List<Card> getSplit() {
         return split;
@@ -59,21 +52,8 @@ public class Player {
         return sum;
     }
 
-    public int calculatePoints() {
-        int sum = 0;
-        for (Card card : hand) {
-            sum += card.getPoints();
-        }
-        return sum;
-    }
-
-    public void addCardToHand(Card card) {
-        if (card.getFace() == CardFace.ACE) {
-            if (calculatePoints() > BLACKJACK_POINTS) {
-                card.setPoints(ACE_BLACKJACK_CASE_POINTS);
-            }
-        }
-        hand.add(card);
+    public boolean isSplit() {
+        return !this.split.isEmpty();
     }
 
     public void addCardToSplit(Card card) {
@@ -83,6 +63,15 @@ public class Player {
             }
         }
         split.add(card);
+    }
+
+    public void doSplit() throws ImpossibleSplitException {
+        if (hand.size() == HAND_SIZE_FOR_SPLIT) {
+            if (hand.get(0).getPoints() == hand.get(1).getPoints()) {
+                split.add(hand.get(1));
+                hand.remove(1);
+            } else throw new ImpossibleSplitException();
+        } else throw new ImpossibleSplitException();
     }
 
     public int takeMoneyForBet(int betAmount) throws NotEnoughMoneyException {
