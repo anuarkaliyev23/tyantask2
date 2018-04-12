@@ -94,6 +94,25 @@ public class Player extends Dealer {
         }
     }
 
+    @Override
+    public void loseCards() {
+        super.loseCards();
+        this.split = new ArrayList<>();
+    }
 
+    public List<Card> getAllCards() {
+        List<Card> cards = new ArrayList<>();
+        cards.addAll(this.hand);
+        cards.addAll(this.split);
+        return cards;
+    }
 
+    @Override
+    public String toString() {
+        return "Player{" +
+                "money=" + money +
+                ", split=" + split +
+                ", hand=" + hand +
+                '}';
+    }
 }

@@ -47,6 +47,11 @@ public class CardDeck {
         deck.addLast(card);
     }
 
+    public void addCards(List<Card> cards) {
+        deck.addAll(cards);
+        shuffle();
+    }
+
     public void addCardAndShuffle(Card card) {
         addCard(card);
         shuffle();

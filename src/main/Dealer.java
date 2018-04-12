@@ -75,7 +75,18 @@ public class Dealer {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(hand);
+    }
+
+    public void loseCards() {
+        this.hand = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "Dealer{" +
+                "hand=" + hand +
+                ", limit=" + limit +
+                '}';
     }
 }
