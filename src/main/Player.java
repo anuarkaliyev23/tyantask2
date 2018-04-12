@@ -28,6 +28,17 @@ public class Player extends Dealer {
     }
 
 
+    @Override
+    public void addCardToHand(Card card) {
+        if (card.getFace() == CardFace.ACE) {
+            if (calculatePoints() > BLACKJACK_POINTS) {
+                card.setPoints(ACE_BLACKJACK_CASE_POINTS);
+            }
+        }
+        hand.add(card);
+    }
+
+
     public List<Card> getSplit() {
         return split;
     }

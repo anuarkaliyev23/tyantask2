@@ -43,6 +43,15 @@ public class CardDeck {
         return deck.pop();
     }
 
+    public void addCard(Card card) {
+        deck.addLast(card);
+    }
+
+    public void addCardAndShuffle(Card card) {
+        addCard(card);
+        shuffle();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
