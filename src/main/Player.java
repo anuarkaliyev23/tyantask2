@@ -27,7 +27,6 @@ public class Player extends Dealer {
         this.split = new ArrayList<>(other.getSplit());
     }
 
-
     @Override
     public void addCardToHand(Card card) {
         if (card.getFace() == CardFace.ACE) {
@@ -98,6 +97,10 @@ public class Player extends Dealer {
     public void loseCards() {
         super.loseCards();
         this.split = new ArrayList<>();
+    }
+
+    public void addMoney(int amount) {
+        money += amount;
     }
 
     public List<Card> getAllCards() {
