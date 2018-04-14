@@ -40,6 +40,15 @@ public class BlackJack {
         this(new Player(playerMoney));
     }
 
+    public BlackJack(BlackJack other) {
+        this.dealer = new Dealer(other.dealer);
+        this.player = new Player(other.player);
+        this.deck = new CardDeck(other.getDeck());
+        this.split = other.isSplit();
+        this.currentBet = other.getCurrentBet();
+        this.firstBet = other.getFirstBet();
+    }
+
     public Dealer getDealer() {
         return dealer;
     }
@@ -74,6 +83,10 @@ public class BlackJack {
 
     public int getFirstBet() {
         return firstBet;
+    }
+
+    public boolean isStarted() {
+        return firstBet != 0;
     }
 
     private void checkCardAdding(boolean toHand) {
@@ -157,9 +170,9 @@ public class BlackJack {
 
     private void endRound(BlackJackEnding ending) {
         switch (ending) {
-            case DRAW: endRoundDraw();
-            case PLAYER_WON: endRoundPlayerWon(false);
-            case PLAYER_BLACKJACK: endRoundPlayerWon(true);
+            case DRAW: endRoundDraw(); break;
+            case PLAYER_WON: endRoundPlayerWon(false); break;
+            case PLAYER_BLACKJACK: endRoundPlayerWon(true); break;
 //            case DEALER_WON: endRoundDealerWon();
         }
     }
@@ -170,31 +183,31 @@ public class BlackJack {
 
         if (playerHand == BlackJackEnding.PLAYER_WON) {
             switch (playerSplit) {
-                case DRAW: player.addMoney((int) (currentBet * 1.5));
-                case DEALER_WON: player.addMoney(currentBet);
-                case PLAYER_BLACKJACK: player.addMoney((int) (currentBet + currentBet * 1.5));
-                case PLAYER_WON: player.addMoney(currentBet * 2 * WINNING_MULTIPLIER);
+                case DRAW: player.addMoney((int) (currentBet * 1.5));  break;
+                case DEALER_WON: player.addMoney(currentBet); break;
+                case PLAYER_BLACKJACK: player.addMoney((int) (currentBet + currentBet * 1.5)); break;
+                case PLAYER_WON: player.addMoney(currentBet * 2 * WINNING_MULTIPLIER); break;
             }
         } else if (playerHand == BlackJackEnding.PLAYER_BLACKJACK) {
             switch (playerSplit) {
-                case PLAYER_BLACKJACK: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2 + currentBet * BLACKJACK_MULTIPLIER / 2);
-                case DRAW: player.addMoney(currentBet / 2 + currentBet * BLACKJACK_MULTIPLIER / 2);
-                case DEALER_WON: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2);
-                case PLAYER_WON: player.addMoney(currentBet * BLACKJACK_MULTIPLIER/ 2 + currentBet);
+                case PLAYER_BLACKJACK: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2 + currentBet * BLACKJACK_MULTIPLIER / 2); break;
+                case DRAW: player.addMoney(currentBet / 2 + currentBet * BLACKJACK_MULTIPLIER / 2); break;
+                case DEALER_WON: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2); break;
+                case PLAYER_WON: player.addMoney(currentBet * BLACKJACK_MULTIPLIER/ 2 + currentBet); break;
             }
         } else if (playerHand == BlackJackEnding.DEALER_WON) {
             switch (playerSplit) {
-                case PLAYER_BLACKJACK: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2);
-                case DRAW: player.addMoney(currentBet / 2);
+                case PLAYER_BLACKJACK: player.addMoney(currentBet * BLACKJACK_MULTIPLIER / 2); break;
+                case DRAW: player.addMoney(currentBet / 2); break;
 //                case DEALER_WON: player.addMoney();
-                case PLAYER_WON: player.addMoney(currentBet);
+                case PLAYER_WON: player.addMoney(currentBet); break;
             }
         } else if (playerHand == BlackJackEnding.DRAW) {
             switch (playerSplit) {
-                case DRAW: player.addMoney(currentBet);
-                case PLAYER_BLACKJACK: player.addMoney(currentBet / 2 + currentBet * BLACKJACK_MULTIPLIER/ 2);
-                case DEALER_WON: player.addMoney(currentBet / 2);
-                case PLAYER_WON: player.addMoney(currentBet / 2 + currentBet);
+                case DRAW: player.addMoney(currentBet); break;
+                case PLAYER_BLACKJACK: player.addMoney(currentBet / 2 + currentBet * BLACKJACK_MULTIPLIER/ 2); break;
+                case DEALER_WON: player.addMoney(currentBet / 2); break;
+                case PLAYER_WON: player.addMoney(currentBet / 2 + currentBet); break;
             }
         }
     }

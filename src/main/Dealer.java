@@ -44,7 +44,7 @@ public class Dealer {
 
 
     public void addCardToHand(Card card) throws DealerReachedLimitException {
-        if (reachedLimit()) throw new DealerReachedLimitException();
+//        if (reachedLimit()) throw new DealerReachedLimitException();
         if (card.getFace() == CardFace.ACE) {
             if (calculatePoints() > BLACKJACK_POINTS) {
                 card.setPoints(ACE_BLACKJACK_CASE_POINTS);

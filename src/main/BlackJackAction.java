@@ -1,5 +1,5 @@
 package main;
 
 public enum BlackJackAction {
-    START, HIT, STAND, SPLIT, DOUBLE;
+    HIT_HAND, HIT_SPLIT, STAND, SPLIT, DOUBLE_HAND, DOUBLE_SPLIT;
 }

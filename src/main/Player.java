@@ -85,7 +85,7 @@ public class Player extends Dealer {
     }
 
     public int takeMoneyForBet(int betAmount) throws NotEnoughMoneyException {
-        if (money - betAmount > 0) {
+        if (money - betAmount < 0) {
             throw new NotEnoughMoneyException();
         } else {
             money -= betAmount;
@@ -114,8 +114,8 @@ public class Player extends Dealer {
     public String toString() {
         return "Player{" +
                 "money=" + money +
-                ", split=" + split +
                 ", hand=" + hand +
+                ", split=" + split +
                 '}';
     }
 }
