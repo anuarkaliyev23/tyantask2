@@ -20,9 +20,11 @@ public class Main {
             ui.start(bet);
 
             int choice = 0;
-            while (choice != BlackJackAction.SPLIT.ordinal()) {
+            while (choice != BlackJackAction.STAND.ordinal()) {
+                System.out.println("BEFORE: ");
                 System.out.println(ui.getMenu());
                 choice = scanner.nextInt();
+                System.out.println("AFTER: ");
                 System.out.println(ui.doAction(choice));
             }
         } catch (Throwable throwable) {

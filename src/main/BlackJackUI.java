@@ -72,10 +72,11 @@ public class BlackJackUI {
     public BlackJack doAction(int ordinal) throws ImpossibleSplitException, NotEnoughMoneyException, InvalidActionException {
         for (BlackJackAction action : BlackJackAction.values()) {
             if (action.ordinal() == ordinal)
-                doAction(action);
+                return doAction(action);
         }
         throw new InvalidActionException();
     }
+
 
 
 }
