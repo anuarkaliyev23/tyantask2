@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/*Класс дилера*/
 public class Dealer {
     protected static final int BLACKJACK_POINTS = 21;
     protected static final int ACE_BLACKJACK_CASE_POINTS = 1;

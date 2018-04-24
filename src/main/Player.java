@@ -8,6 +8,10 @@ import main.exceptions.NotEnoughMoneyException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* Класс игрока
+* Он наследуется от дилера, потому что обладает большей частью тех же свойств
+* */
 public class Player extends Dealer {
 
     private static final int HAND_SIZE_FOR_SPLIT = 2;

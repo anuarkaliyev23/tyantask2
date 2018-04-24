@@ -8,7 +8,9 @@ import main.exceptions.PlayerHaveNoPlacedBetException;
 
 import java.util.Objects;
 
-
+/*
+* Класс самой игры
+* */
 public class BlackJack {
     private static final int INITIAL_GIVEOUT_CARDS_COUNT = 2;
     private static final int BLACKJACK = 21;
@@ -16,6 +18,13 @@ public class BlackJack {
     private static final int BLACKJACK_MULTIPLIER = 3;
     private static final int WINNING_MULTIPLIER = 2;
 
+    /*
+    * Здесь ты видишь дилера, игрока, колоду
+    * boolean split который показывает сплитовал ли игрок.
+    * (Говорю заранее - систему сплитов можно было сделать и лучше, не всегда самые лучшие решения были использованы).
+    * Количество денег сколько сейчас на кону (currentbet)
+    * И сколько была первая ставка (для всяких даблов и т.д.)
+    * */
     private Dealer dealer;
     private Player player;
     private CardDeck deck;
@@ -23,6 +32,7 @@ public class BlackJack {
     private int currentBet;
     private int firstBet;
 
+    /*Разные виды конструкторов*/
     public BlackJack(Dealer dealer, Player player) {
         this.dealer = new Dealer(dealer);
         this.player = new Player(player);
@@ -85,14 +95,22 @@ public class BlackJack {
         return firstBet;
     }
 
+    /*Метод проверящий, былв ли начата игрв*/
     public boolean isStarted() {
         return firstBet != 0;
     }
 
+    /*Функция проверяющая можно ли добавить карту в руку (основную или сплитовую) игрока.
+    * Если он пытается добавить карту в сплит, но сплита в игре не было - кидает исключение
+    * */
     private void checkCardAdding(boolean toHand) {
         if (!toHand && !split) throw new NoSplitException();
     }
 
+    /*
+    * Функция делающая ставку за игрока
+    * Если не хватает денег - кидает исключение
+    * */
     public void placeBet(int amount) throws NotEnoughMoneyException {
         if (firstBet == 0) {
             firstBet = player.takeMoneyForBet(amount);
@@ -102,6 +120,12 @@ public class BlackJack {
         }
     }
 
+    /*
+    * Функция, производящая дабл за игрока. Ставка удваивается, дается еще одна карта.
+    * Параметр toHand нужен чтобы определить куда давать карту - на сплит или в основную руку.
+    * К сожалению я не доделал и он не учитывает в расчет выигрыша откуда была какая ставка - все сгребается в общий котел
+    *
+    * */
     public void doublePlayerBet(boolean toHand) throws PlayerHaveNoPlacedBetException, NotEnoughMoneyException {
         checkCardAdding(toHand);
         if (firstBet == 0) throw new PlayerHaveNoPlacedBetException();
@@ -109,13 +133,20 @@ public class BlackJack {
         addCardToPlayer(toHand);
     }
 
-
+    /*
+    * Произвести первую раздачу с колоды
+    * */
     public void giveOutInitialCards() {
         for (int i = 0; i < INITIAL_GIVEOUT_CARDS_COUNT; i++) {
             player.addCardToHand(deck.popCard());
             dealer.addCardToHand(deck.popCard());
         }
     }
+
+    /*
+    *
+    * Функция забирающая у всех карты (обычно вызывается в конце раунда)
+    * */
 
     public void takeCardsFromAll() {
         deck.addCards(dealer.getHand());
@@ -146,6 +177,12 @@ public class BlackJack {
         dealer.addCardToHand(deck.popCard());
     }
 
+
+    /*
+    * Функция завершающая раунд.
+    * В случае если спита не было считает очки игрока и дилера, отправляет их другой функции чтобы понять кто выиграл
+    * Если был сплит каждую руку считает отдельно
+    * */
     public void endRound() {
         if (!split) {
             int playerPoints = this.player.calculatePoints();
@@ -168,6 +205,9 @@ public class BlackJack {
         this.firstBet = 0;
     }
 
+    /*
+    * Функция, которая принимает параметром вариант окончания игры и вызывает соответствующую функцию чтобы отдать или забрать выигрыш
+    * */
     private void endRound(BlackJackEnding ending) {
         switch (ending) {
             case DRAW: endRoundDraw(); break;
@@ -177,7 +217,10 @@ public class BlackJack {
         }
     }
 
-
+    /*
+    * Функция, считающая как закончить раунд в случае сплита со всеми возможными вариантами
+    * (например - обе руки выиграли \ одна выиграла, одна проиграла \ обе проиграли)
+    * */
     private void endRoundSplit(BlackJackEnding playerHand, BlackJackEnding playerSplit) {
         if (playerHand == BlackJackEnding.DRAW && playerSplit == BlackJackEnding.DRAW) endRoundDraw();
 
@@ -212,6 +255,7 @@ public class BlackJack {
         }
     }
 
+    /*Функция отдающая деньги игроку в случае победы игрока*/
     private void endRoundPlayerWon(boolean isBlackJack) {
         if (isBlackJack) {
             player.addMoney(currentBet * BLACKJACK_MULTIPLIER);
@@ -222,10 +266,16 @@ public class BlackJack {
     private void endRoundDealerWon() {
         // do nothing
     }
+
+    /*Функция отдающая деньги игроку в случае ничьи*/
     private void endRoundDraw() {
         player.addMoney(currentBet);
     }
 
+    /*
+    * Функция определяющая как закончился матч
+    * Параметром передаются очки игрока и дилера
+    * */
     private BlackJackEnding identifyEnding(int playerPoints, int dealerPoints) {
         if (playerPoints == dealerPoints) return BlackJackEnding.DRAW;
         if (playerPoints == BLACKJACK) return BlackJackEnding.PLAYER_BLACKJACK;
@@ -239,12 +289,15 @@ public class BlackJack {
         }
     }
 
+
+    /*Функция производящая сплит по правилам Блэкджека*/
     public void doSplit() throws ImpossibleSplitException, NotEnoughMoneyException {
         player.doSplit();
         placeBet(firstBet * 2);
         split = true;
     }
 
+    /*Автосгенеринные функции*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

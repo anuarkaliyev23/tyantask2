@@ -5,6 +5,13 @@ import main.exceptions.ImpossibleSplitException;
 import main.exceptions.InvalidActionException;
 import main.exceptions.NotEnoughMoneyException;
 
+
+/*
+* Это класс - функция которого предоставлять интерфейс. Поэтому на конце UI - User Interface.
+*
+* Она служит посредником между реальным игроком (тобой) и игрой
+*
+* */
 public class BlackJackUI {
     private BlackJack blackJack;
 
@@ -20,6 +27,7 @@ public class BlackJackUI {
         blackJack = new BlackJack(money);
     }
 
+    /*Произвести какое либо действие*/
     public BlackJack doAction(BlackJackAction action) throws ImpossibleSplitException, NotEnoughMoneyException {
         if (!blackJack.isStarted()) throw new BlackJackNotStartedExcetption();
         switch (action) {
@@ -59,6 +67,13 @@ public class BlackJackUI {
         return blackJack;
     }
 
+    /*
+    * Строка содержащая все возможные действия игрока
+    *
+    * StringBuilder - это такой класс который используется чтобы вручную не плясовать каждый раз строку,
+    * а скормить билдеру все что нужно, а потом он сам отдать готовую строку. Также это используется не только из-за удобства,
+    * но и из-за перфоманса - билдер быстрее плюсует строки чем просто стринги и плюсы
+    * */
     public String getMenu() {
         StringBuilder builder = new StringBuilder();
         builder.append(blackJack).append("\n");
