@@ -2,6 +2,12 @@ package main.cards;
 
 import java.util.Objects;
 
+/*
+* Класс карты, у которой внутри масть, номинал и количество очков за нее
+* Единственная причина, по которой я сделал ей количество очков, это потому, что
+* в случае с тузом очки могут меняться. Если бы не этот факт я бы пользовался только функцией которую
+* написал в CardFace
+* */
 public class Card {
     private CardFace face;
     private CardSuit suit;
@@ -43,6 +49,7 @@ public class Card {
         this.points = points;
     }
 
+    /*Авто сгенерированные функции*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
